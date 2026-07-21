@@ -227,7 +227,7 @@ function durTable(du){
 }
 function drawCharts(d){
   Chart.defaults.font.family="'Segoe UI',system-ui,sans-serif";Chart.defaults.color='#66708a';
-  if(d.duracao){charts.push(new Chart(document.getElementById('cDur'),{type:'bar',data:{labels:d.duracao.cds.map(function(x){return x[0];}),datasets:[{label:'Duração média (dias)',data:d.duracao.cds.map(function(x){return x[2];}),backgroundColor:'#2c5f8a',borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.parsed.y.toString().replace('.',',')+' dias';}}}},scales:{y:{ticks:{callback:function(v){return v+'d';}}}}}));}
+  if(d.duracao){charts.push(new Chart(document.getElementById('cDur'),{type:'bar',data:{labels:d.duracao.cds.map(function(x){return x[0];}),datasets:[{label:'Duração média (dias)',data:d.duracao.cds.map(function(x){return x[2];}),backgroundColor:'#2c5f8a',borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.parsed.y.toString().replace('.',',')+' dias';}}}},scales:{y:{ticks:{callback:function(v){return v+'d';}}}}}}));}
   charts.push(new Chart(document.getElementById('cStatus'),{type:'doughnut',
     data:{labels:['Finalizado (Sim)','Não finalizado'],datasets:[{data:[d.fim.v,d.nao.v],backgroundColor:['#1e8e5a','#c0392b'],borderWidth:2,borderColor:'#fff'}]},
     options:{responsive:true,maintainAspectRatio:false,cutout:'58%',plugins:{legend:{position:'bottom'},tooltip:{callbacks:{label:function(c){return c.label+': '+brl(c.parsed)+' ('+(c.parsed/d.totVlr*100).toFixed(1)+'%)';}}}}}}));
