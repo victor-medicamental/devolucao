@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Devoluções · Medicamental</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  :root{--bg:#f4f6fa;--card:#fff;--ink:#1c2333;--muted:#66708a;--red:#c0392b;--blue:#2c5f8a;--green:#1e8e5a;--amber:#b9770e;--line:#e3e8f0;--shadow:0 1px 3px rgba(16,24,40,.08),0 4px 12px rgba(16,24,40,.05);}
+  *{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}
+  body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--ink)}
+  #cover{position:relative;min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;background:linear-gradient(160deg,#0b1930 0%,#0e2140 55%,#0b1c36 100%);overflow:hidden}
+  #cover svg.bgart{position:absolute;inset:0;width:100%;height:100%;opacity:.55}
+  .cov{position:relative;z-index:2;max-width:860px;padding:40px 24px}
+  .cov .brand{color:#fff;font-size:30px;font-weight:700;letter-spacing:.5px}
+  .cov .tag{display:inline-block;margin-top:16px;padding:7px 20px;border:1px solid rgba(255,255,255,.35);border-radius:30px;color:#dbe6f5;font-size:12px;letter-spacing:.22em;font-weight:600}
+  .cov .divider{width:56px;height:3px;background:#5b9bd5;margin:26px auto;border-radius:2px}
+  .cov h1{color:#fff;font-size:52px;font-weight:700;line-height:1.1}
+  .cov .sub{color:#e8eef7;font-size:19px;font-weight:600;margin-top:14px}
+  .cov .caps{color:#9fb4d0;font-size:12.5px;letter-spacing:.18em;margin-top:10px;text-transform:uppercase}
+  .cov .choose{color:#9fb4d0;font-size:13px;margin-top:30px;letter-spacing:.04em}
+  .cov .btns{display:flex;gap:16px;justify-content:center;margin-top:14px;flex-wrap:wrap}
+  .cov .btn{display:inline-block;background:#fff;color:#0e2140;font-weight:700;font-size:15px;padding:14px 30px;border:none;border-radius:30px;cursor:pointer;box-shadow:0 4px 18px rgba(0,0,0,.35);transition:.2s}
+  .cov .btn.ghost{background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,.55)}
+  .cov .btn:hover{transform:translateY(-2px)}
+  .cov .src{color:#7e93b3;font-size:12px;margin-top:26px}
+  /* toggle no topo do painel */
+  .switchbar{position:sticky;top:0;z-index:20;background:#0e2140;padding:12px 26px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;box-shadow:0 2px 10px rgba(0,0,0,.15)}
+  .switchbar .lab{color:#9fb4d0;font-size:12px;letter-spacing:.14em;text-transform:uppercase;font-weight:600}
+  .seg{display:inline-flex;background:#1b3357;border-radius:30px;padding:4px}
+  .seg button{border:none;background:transparent;color:#c7d5ea;font-size:13.5px;font-weight:600;padding:8px 22px;border-radius:24px;cursor:pointer;transition:.15s}
+  .seg button.on{background:#fff;color:#0e2140}
+  .switchbar .up{margin-left:auto;color:#7e93b3;font-size:12px;text-decoration:none}
+  .switchbar .up:hover{color:#fff}
+  main{padding:26px;max-width:1280px;margin:0 auto}
+  header.ph{margin-bottom:22px}
+  h2.pt{font-size:23px;font-weight:700}h2.pt span{color:var(--red)}
+  .sub2{color:var(--muted);font-size:13px;margin-top:4px}
+  .badge{display:inline-block;margin-left:8px;background:#eef1f6;color:#2c5f8a;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;vertical-align:middle}
+  .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(185px,1fr));gap:14px;margin-bottom:20px}
+  .kpi{background:var(--card);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);border-top:3px solid var(--blue)}
+  .kpi.alert{border-top-color:var(--red)}
+  .kpi .lbl{font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);font-weight:600}
+  .kpi .val{font-size:21px;font-weight:700;margin-top:6px}
+  .kpi .det{font-size:12px;color:var(--muted);margin-top:4px}.kpi .det b{color:var(--red)}
+  #hl{background:linear-gradient(135deg,#fff8f0,#fdf3f2);border:1px solid #f0ddd0;border-radius:12px;padding:18px 20px;margin-bottom:20px}
+  #hl h3{font-size:14px;margin-bottom:10px;color:var(--red)}
+  #hl li{margin:7px 0 7px 18px;font-size:13.5px;line-height:1.55}#hl b{color:var(--red)}
+  .cards{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px}
+  .card{background:var(--card);border-radius:12px;padding:18px;box-shadow:var(--shadow)}
+  .card h3{font-size:14px;margin-bottom:4px}.card .cap{font-size:12px;color:var(--muted);margin-bottom:12px}
+  .card.wide{grid-column:1/-1}
+  .chartbox{position:relative;height:270px}.chartbox.tall{height:320px}
+  table{width:100%;border-collapse:collapse;font-size:12.5px}
+  thead th{background:#233047;color:#fff;padding:8px 10px;text-align:right;font-weight:600}
+  thead th:first-child{text-align:left}
+  tbody td{padding:7px 10px;border-bottom:1px solid var(--line);text-align:right;font-variant-numeric:tabular-nums}
+  tbody td:first-child{text-align:left}tbody tr:nth-child(even){background:#f9fafc}
+  tbody tr.total td{font-weight:700;background:#eef1f6;border-top:2px solid #233047}
+  .pill{display:inline-block;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:600}
+  .pill.hi{background:#fdecea;color:var(--red)}.pill.md{background:#fef5e7;color:var(--amber)}.pill.lo{background:#eafaf1;color:var(--green)}
+  footer{margin-top:22px;text-align:center;color:var(--muted);font-size:11.5px;padding-bottom:26px}
+  @media(max-width:900px){.cards{grid-template-columns:1fr}.cov h1{font-size:36px}}
+</style></head><body>
+
+<section id="cover">
+  <svg class="bgart" viewBox="0 0 1900 750" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+    <g fill="#3f5f8f" opacity=".18"><rect x="90" y="560" width="60" height="190"/><rect x="225" y="515" width="60" height="235"/><rect x="360" y="470" width="60" height="280"/><rect x="495" y="520" width="60" height="230"/><rect x="1180" y="430" width="60" height="320"/></g>
+    <polyline points="0,640 190,565 350,600 510,497 700,515 890,420 1060,440 1240,290 1430,330 1620,195 1690,225 1840,110" fill="none" stroke="#6f9fd8" stroke-width="4" stroke-linejoin="round" opacity=".85"/>
+    <g fill="#6f9fd8" opacity=".95"><circle cx="190" cy="565" r="9"/><circle cx="510" cy="497" r="9"/><circle cx="890" cy="420" r="8"/><circle cx="1240" cy="290" r="9"/><circle cx="1620" cy="195" r="9"/><circle cx="1840" cy="110" r="8"/></g>
+    <g stroke="#6f9fd8" stroke-width="2" fill="none" opacity=".5"><polyline points="1590,95 1730,45 1845,155 1690,225 1590,95"/><polyline points="1730,45 1690,225"/></g>
+    <g fill="#6f9fd8" opacity=".9"><circle cx="1590" cy="95" r="7"/><circle cx="1730" cy="45" r="7"/><circle cx="1845" cy="155" r="7"/></g>
+  </svg>
+  <div class="cov">
+    <div class="brand">Medicamental</div><br>
+    <span class="tag">INTELIGÊNCIA DE MERCADO · ANÁLISE DE DADOS</span>
+    <div class="divider"></div>
+    <h1>Estudo de Devoluções</h1>
+    <div class="sub">Análise da Base de Envio — status, CDs, motivos e evolução</div>
+    <div class="caps">Período 01/01/2025 a 15/07/2026 · CD: (Todos) · Posição de 15/07/2026</div>
+    <div class="btns">
+      <button class="btn" onclick="go('total')">Acessar o painel →</button>
+    </div>
+    <div class="src">Dados internos · Gerado a partir do relatório de devoluções (Base de Envio)</div>
+  </div>
+</section>
+
+<div class="switchbar" id="switchbar" style="display:none">
+  <span class="lab">Visão</span>
+  <div class="seg">
+    <button id="segTotal" onclick="setView('total')">Devolução Total</button>
+    <button id="segGeral" onclick="setView('geral')">Devolução Geral</button>
+  </div>
+  <a class="up" href="#" onclick="backCover();return false;">↑ voltar à capa</a>
+</div>
+
+<main id="painel" style="display:none">
+  <header class="ph">
+    <h2 class="pt">Devoluções — <span>Base de Envio</span> <span class="badge" id="viewBadge"></span></h2>
+    <div class="sub2" id="viewSub"></div>
+  </header>
+  <div class="kpis" id="kpis"></div>
+  <div id="hl"></div>
+  <div class="cards" id="charts"></div>
+  <div class="cards" id="tables"></div>
+  <footer id="foot"></footer>
+</main>
+
+<script>
+var brl=function(v){return v.toLocaleString('pt-BR',{style:'currency',currency:'BRL'});};
+var kfmt=function(v){return 'R$ '+(v>=1e6?(v/1e6).toFixed(1).replace('.',',')+' mi':(v/1e3).toFixed(0)+' mil');};
+var m2=function(v){return v.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});};
+var esc=function(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');};
+
+var DATA={
+  geral:{
+    nome:'Devolução Geral',
+    sub:'Base completa (TOTAL E PARCIAL) · 01/01/2025 a 15/07/2026 · CD: (Todos)',
+    totNF:13328, totVlr:17865964.08, totSust:1459694.90, totBaix:7114987.33,
+    fim:{q:9751,v:13592205.88,s:248920.62,b:6884680.24},
+    nao:{q:3577,v:4273758.20,s:1210774.28,b:230307.09},
+    cd:[['SP',2113,3004407.31,747000.44,145883.46,70.3],['GO',190,500679.06,265762.81,20337.32,11.7],['PR',1047,405947.01,120934.34,53.99,9.5],['RJ',175,255569.82,47602.35,58850.18,6.0],['DF',52,107155.00,29474.34,5182.14,2.5]],
+    mensal:[['Até 08/25',5,11276.52,2128.90,0,0.3],['09/25',4,27276.47,0,222.37,0.6],['10/25',6,8318.84,0,0,0.2],['11/25',4,2300.96,1837.76,0,0.1],['12/25',11,66092.00,1543.20,0,1.5],['01/26',216,204544.00,94091.41,7664.73,4.8],['02/26',233,209531.08,95063.22,1275.18,4.9],['03/26',284,272070.78,74970.30,28958.15,6.4],['04/26',455,561131.65,146789.45,33533.12,13.1],['05/26',903,1037417.06,277569.53,108327.92,24.3],['06/26',1214,1668193.05,497897.94,50325.62,39.0],['07/26*',242,205605.79,18882.57,0,4.8]],
+    motivos:[['DESACORDO COMERCIAL',292,561088.42,308528.63,105943.72,13.1],['FALTA DE PRODUTO',250,548255.33,9663.63,0,12.8],['VALIDADE PRÓXIMA / VENCIDO',278,542113.26,16989.83,0,12.7],['FALTA DE VOLUME',307,481419.85,151986.85,64572.49,11.3],['EXTRAVIO/ROUBO',1067,450105.08,212392.71,10518.81,10.5],['ERRO DO DEPÓSITO',317,236195.37,177655.85,5117.37,5.5],['NÃO SOLICITADO',242,212206.53,86785.66,23144.01,5.0],['MERCADORIA AVARIADA',136,180704.57,8966.72,492.28,4.2],['(Não informado)',154,120842.27,67116.40,1289.26,2.8],['ERRO DE DIGITAÇÃO',125,106243.99,18189.96,9157.55,2.5],['Outros',409,834583.53,152498.04,10071.60,19.5]],
+    hl:[
+      '<b>R$ 4,27 milhões</b> (3.577 NFs) seguem <b>não finalizados</b> — 23,9% de todo o valor de devoluções do período.',
+      '<b>SP concentra 70,3%</b> do valor pendente (R$ 3,00 mi em 2.113 NFs) — foco prioritário de tratamento.',
+      'Backlog recente e crescente: <b>mai/26 + jun/26 = 63,3%</b> do valor pendente; jun/26 sozinho soma <b>R$ 1,67 mi (39%)</b>.',
+      'Principais motivos por valor: <b>Desacordo Comercial (13,1%)</b>, <b>Falta de Produto (12,8%)</b> e <b>Validade Próxima/Vencido (12,7%)</b>.',
+      'Por quantidade, <b>Extravio/Roubo lidera com 1.067 NFs</b> (30% das pendências), com ticket baixo (R$ 422/NF).',
+      '<b>Desacordo Comercial</b> tem o maior valor sustado: <b>R$ 308,5 mil</b> (55% do próprio valor).',
+      '154 NFs (R$ 120,8 mil) estão <b>sem motivo informado</b>.'
+    ]
+  },
+  total:{
+    nome:'Devolução Total',
+    sub:'Somente devoluções TOTAIS (Total/Parcial = TOTAL)',
+    totNF:10998, totVlr:10423458.55, totSust:1433118.30, totBaix:7062411.41,
+    fim:{q:8390,v:8312000.92,s:225606.99,b:6832104.32},
+    nao:{q:2608,v:2111457.63,s:1207511.31,b:230307.09},
+    cd:[['SP',1397,1305113.67,743737.47,145883.46,61.8],['GO',134,322474.70,265762.81,20337.32,15.3],['PR',919,244860.94,120934.34,53.99,11.6],['RJ',118,190239.82,47602.35,58850.18,9.0],['DF',40,48768.50,29474.34,5182.14,2.3]],
+    mensal:[['Até 08/25',3,2128.90,2128.90,0,0.1],['09/25',3,798.77,0,222.37,0.0],['10/25',0,0,0,0,0.0],['11/25',1,796.77,796.77,0,0.0],['12/25',8,8939.30,1543.20,0,0.4],['01/26',188,128672.40,94091.41,7664.73,6.1],['02/26',196,140244.99,95063.22,1275.18,6.6],['03/26',219,144943.61,74970.30,28958.15,6.9],['04/26',351,262781.02,146789.45,33533.12,12.4],['05/26',645,503716.70,275347.55,108327.92,23.9],['06/26',859,852812.93,497897.94,50325.62,40.4],['07/26*',135,65622.24,18882.57,0,3.1]],
+    motivos:[['DESACORDO COMERCIAL',236,474233.28,307487.64,105943.72,22.5],['EXTRAVIO/ROUBO',1066,448581.59,212392.71,10518.81,21.2],['FALTA DE VOLUME',300,429040.48,149764.87,64572.49,20.3],['ERRO DO DEPÓSITO',317,236195.37,177655.85,5117.37,11.2],['NÃO SOLICITADO',190,126467.64,86785.66,23144.01,6.0],['(Não informado)',115,80517.78,67116.40,1289.26,3.8],['ERRO DE DIGITAÇÃO',48,35259.81,18189.96,9157.55,1.7],['FALTA DE PRODUTO',28,24548.38,9663.63,0,1.2],['VALIDADE PRÓXIMA / VENCIDO',36,21565.24,16989.83,0,1.0],['MERCADORIA AVARIADA',23,11152.94,8966.72,492.28,0.5],['Outros',249,223895.12,152498.04,10071.60,10.6]],
+    hl:[
+      'Considerando apenas devoluções <b>totais</b>: <b>R$ 2,11 milhões</b> (2.608 NFs) seguem <b>não finalizados</b> — 20,3% do valor total.',
+      '<b>SP concentra 61,8%</b> do valor pendente (R$ 1,31 mi em 1.397 NFs) — foco prioritário.',
+      'Backlog recente: <b>mai/26 + jun/26 = 64,3%</b> do valor pendente; jun/26 sozinho soma <b>R$ 852,8 mil (40,4%)</b>.',
+      'Principais motivos por valor: <b>Desacordo Comercial (22,5%)</b>, <b>Extravio/Roubo (21,2%)</b> e <b>Falta de Volume (20,3%)</b> — juntos 64% do pendente.',
+      'Por quantidade, <b>Extravio/Roubo lidera com 1.066 NFs</b> (40,9% das pendências), com ticket baixo (R$ 421/NF).',
+      '<b>Desacordo Comercial</b> tem o maior valor sustado: <b>R$ 307,5 mil</b> (65% do próprio valor) — negociação travada.',
+      '115 NFs (R$ 80,5 mil) estão <b>sem motivo informado</b>.',
+      'Ticket médio pendente: <b>R$ 809,61</b> por NF.'
+    ]
+  }
+};
+
+var charts=[];
+function destroyCharts(){charts.forEach(function(c){c.destroy();});charts=[];}
+
+function render(key){
+  var d=DATA[key];
+  document.getElementById('viewBadge').textContent=d.nome;
+  document.getElementById('viewSub').textContent=d.sub+' · Medicamental · atualizado em 15/07/2026';
+  document.getElementById('segGeral').className=(key==='geral'?'on':'');
+  document.getElementById('segTotal').className=(key==='total'?'on':'');
+
+  var finPct=(d.fim.v/d.totVlr*100).toFixed(1), naoPct=(d.nao.v/d.totVlr*100).toFixed(1);
+  var sustPct=(d.nao.s/d.nao.v*100).toFixed(1), baixPct=(d.nao.b/d.nao.v*100).toFixed(1);
+  document.getElementById('kpis').innerHTML=
+    kpi('Total de NFs',d.totNF.toLocaleString('pt-BR'),'R$ '+m2(d.totVlr),false)+
+    kpi('Finalizadas',d.fim.q.toLocaleString('pt-BR')+' <span style="font-size:13px;color:var(--green)">('+finPct+'%)</span>','R$ '+m2(d.fim.v),false)+
+    kpi('Não finalizadas',d.nao.q.toLocaleString('pt-BR')+' <span style="font-size:13px;color:var(--red)">('+naoPct+'%)</span>','<b>R$ '+m2(d.nao.v)+'</b> em aberto',true)+
+    kpi('Valor sustado (pendentes)','R$ '+m2(d.nao.s),sustPct+'% do valor em aberto',true)+
+    kpi('Valor baixado (pendentes)','R$ '+m2(d.nao.b),'apenas '+baixPct+'% do valor em aberto',false)+
+    kpi('Baixado (total)','R$ '+m2(d.totBaix),'sustado total: R$ '+m2(d.totSust),false);
+
+  document.getElementById('hl').innerHTML='<h3>⚠ Destaques importantes</h3><ul>'+d.hl.map(function(x){return '<li>'+x+'</li>';}).join('')+'</ul>';
+
+  var ch=document.getElementById('charts');
+  ch.innerHTML=
+    card('Status das devoluções (valor NF)','Finalizado vs. não finalizado','<div class="chartbox"><canvas id="cStatus"></canvas></div>',false)+
+    card('Pendências por CD (valor NF)','Não finalizados','<div class="chartbox"><canvas id="cCD"></canvas></div>',false)+
+    (d.mensal?card('Evolução do backlog por data da NF','Não finalizados — valor NF e valor sustado por mês','<div class="chartbox"><canvas id="cMes"></canvas></div>',true):'')+
+    card('Motivos das devoluções não finalizadas (Top 10 + Outros)','Ordenado por valor NF · vermelho = sustado','<div class="chartbox tall"><canvas id="cMot"></canvas></div>',true);
+
+  var t=document.getElementById('tables');
+  t.innerHTML=
+    card('Resumo por Status','Base — '+d.totNF.toLocaleString('pt-BR')+' NFs',statusTable(d),false)+
+    card('Resumo por CD — Não Finalizados',d.nao.q.toLocaleString('pt-BR')+' NFs pendentes',rankTable(d.cd,'CD'),false)+
+    (d.mensal?card('Share por Data NF — Não Finalizados','Backlog por mês de emissão',rankTable(d.mensal,'Período'),true):'')+
+    card('Share de Motivos — Não Finalizados (Top 10 + Outros)','Ordenado por valor NF',rankTable(d.motivos,'Motivo'),true);
+
+  document.getElementById('foot').textContent='Painel de Devoluções · '+d.nome+' · valores em R$ · gerado em 21/07/2026';
+
+  destroyCharts();
+  drawCharts(d);
+  try{localStorage.setItem('devView',key);}catch(e){}
+}
+
+function kpi(l,v,det,alert){return '<div class="kpi'+(alert?' alert':'')+'"><div class="lbl">'+l+'</div><div class="val">'+v+'</div><div class="det">'+det+'</div></div>';}
+function card(h,cap,body,wide){return '<div class="card'+(wide?' wide':'')+'"><h3>'+h+'</h3><div class="cap">'+cap+'</div>'+body+'</div>';}
+
+function statusTable(d){
+  return '<table><thead><tr><th>Finalizado</th><th>Qtde NF</th><th>Vlr NF</th><th>Sustado</th><th>Baixado</th></tr></thead><tbody>'+
+    row(['Sim',d.fim.q,d.fim.v,d.fim.s,d.fim.b])+
+    row(['Não',d.nao.q,d.nao.v,d.nao.s,d.nao.b])+
+    '<tr class="total"><td>Total</td><td>'+d.totNF.toLocaleString('pt-BR')+'</td><td>R$ '+m2(d.totVlr)+'</td><td>R$ '+m2(d.totSust)+'</td><td>R$ '+m2(d.totBaix)+'</td></tr></tbody></table>';
+}
+function row(a){return '<tr><td>'+esc(a[0])+'</td><td>'+a[1].toLocaleString('pt-BR')+'</td><td>R$ '+m2(a[2])+'</td><td>R$ '+m2(a[3])+'</td><td>'+(a[4]?'R$ '+m2(a[4]):'—')+'</td></tr>';}
+function rankTable(arr,label){
+  var tq=0,tv=0,ts=0,tb=0;
+  var body=arr.map(function(a){
+    tq+=a[1];tv+=a[2];ts+=a[3];tb+=a[4];
+    var sh=a[5], cls=sh>=13?'hi':(sh>=10?'md':'lo');
+    return '<tr><td>'+esc(a[0])+'</td><td>'+a[1].toLocaleString('pt-BR')+'</td><td>R$ '+m2(a[2])+'</td><td>'+(a[3]?'R$ '+m2(a[3]):'—')+'</td><td>'+(a[4]?'R$ '+m2(a[4]):'—')+'</td><td><span class="pill '+cls+'">'+sh.toString().replace('.',',')+'%</span></td></tr>';
+  }).join('');
+  return '<table><thead><tr><th>'+label+'</th><th>Qtde</th><th>Vlr NF</th><th>Sustado</th><th>Baixado</th><th>% Share</th></tr></thead><tbody>'+body+
+    '<tr class="total"><td>Total</td><td>'+tq.toLocaleString('pt-BR')+'</td><td>R$ '+m2(tv)+'</td><td>R$ '+m2(ts)+'</td><td>R$ '+m2(tb)+'</td><td>100,0%</td></tr></tbody></table>';
+}
+
+function drawCharts(d){
+  Chart.defaults.font.family="'Segoe UI',system-ui,sans-serif";Chart.defaults.color='#66708a';
+  charts.push(new Chart(document.getElementById('cStatus'),{type:'doughnut',
+    data:{labels:['Finalizado (Sim)','Não finalizado'],datasets:[{data:[d.fim.v,d.nao.v],backgroundColor:['#1e8e5a','#c0392b'],borderWidth:2,borderColor:'#fff'}]},
+    options:{responsive:true,maintainAspectRatio:false,cutout:'58%',plugins:{legend:{position:'bottom'},tooltip:{callbacks:{label:function(c){return c.label+': '+brl(c.parsed)+' ('+(c.parsed/d.totVlr*100).toFixed(1)+'%)';}}}}}}));
+  charts.push(new Chart(document.getElementById('cCD'),{type:'bar',
+    data:{labels:d.cd.map(function(x){return x[0];}),datasets:[{label:'Vlr NF',data:d.cd.map(function(x){return x[2];}),backgroundColor:'#2c5f8a',borderRadius:4},{label:'Sustado',data:d.cd.map(function(x){return x[3];}),backgroundColor:'#c0392b',borderRadius:4}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom'},tooltip:{callbacks:{label:function(c){return c.dataset.label+': '+brl(c.parsed.y);}}}},scales:{y:{ticks:{callback:kfmt}}}}}));
+  if(d.mensal){
+    charts.push(new Chart(document.getElementById('cMes'),{type:'bar',
+      data:{labels:d.mensal.map(function(x){return x[0];}),datasets:[{label:'Vlr NF pendente',data:d.mensal.map(function(x){return x[2];}),backgroundColor:'#c0392b',borderRadius:4,order:2},{label:'Valor sustado',type:'line',data:d.mensal.map(function(x){return x[3];}),borderColor:'#233047',backgroundColor:'#233047',tension:.3,pointRadius:3,order:1}]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom'},tooltip:{callbacks:{label:function(c){return c.dataset.label+': '+brl(c.parsed.y);}}}},scales:{y:{ticks:{callback:kfmt}}}}}));
+  }
+  charts.push(new Chart(document.getElementById('cMot'),{type:'bar',
+    data:{labels:d.motivos.map(function(x){return x[0];}),datasets:[{label:'Vlr NF',data:d.motivos.map(function(x){return x[2];}),backgroundColor:'#2c5f8a',borderRadius:4},{label:'Sustado',data:d.motivos.map(function(x){return x[3];}),backgroundColor:'#c0392b',borderRadius:4}]},
+    options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom'},tooltip:{callbacks:{label:function(c){return c.dataset.label+': '+brl(c.parsed.x);}}}},scales:{x:{ticks:{callback:kfmt}}}}}));
+}
+
+function go(key){
+  document.getElementById('cover').style.display='none';
+  document.getElementById('switchbar').style.display='flex';
+  document.getElementById('painel').style.display='block';
+  render(key);
+  window.scrollTo(0,0);
+}
+function setView(key){render(key);window.scrollTo(0,0);}
+function backCover(){
+  document.getElementById('cover').style.display='flex';
+  document.getElementById('switchbar').style.display='none';
+  document.getElementById('painel').style.display='none';
+  window.scrollTo(0,0);
+}
+</script>
+</body></html>
